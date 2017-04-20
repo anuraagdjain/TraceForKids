@@ -13,7 +13,7 @@ struct line{
     var end:CGPoint
 }
 
-var lineslist:line[] = []
+var lineslist:[line] = []
 //This is basically the first point you touch on any touch stroke
 var firstpoint:CGPoint!
 
@@ -27,15 +27,15 @@ var lastpoint:CGPoint!
 class ViewController:UIViewController{
    
     
-    @IBOutlet var drawView: UIView
-    @IBOutlet var backImage: UIImageView
+    @IBOutlet weak var drawView: UIView!
+    @IBOutlet weak var backImage: UIImageView!
     //Adding the IBOutlet for the UIView where we will trace the elements
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         var imagenumber =  Int(arc4random() % 27)
         var imagename = String(imagenumber) + ".jpg"
-        println(imagename)
+        print(imagename)
         backImage.image = UIImage(named: imagename)
 
     }
@@ -44,19 +44,19 @@ class ViewController:UIViewController{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    @IBAction func next(sender: AnyObject) {
+    @IBAction func next(_ sender: AnyObject) {
         clear(self)
             var imagenumber =  Int(arc4random() % 27)
         if imagenumber == 0{
             imagenumber = 1
         }
             var imagename = String(imagenumber) + ".jpg"
-            println(imagename)
+            print(imagename)
             backImage.image = UIImage(named: imagename)
     
     }
 
-    @IBAction func clear(sender: AnyObject) {
+    @IBAction func clear(_ sender: AnyObject) {
         lineslist = []
         drawView.setNeedsDisplay()
     }

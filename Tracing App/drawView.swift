@@ -10,18 +10,22 @@ import UIKit
 
 
 class drawView: UIView {
-    init(coder aDecoder: NSCoder!) {
-        super.init(coder: aDecoder)
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
     }
-    @IBOutlet var drawView: AnyObject
+    @IBOutlet var drawView: AnyObject?
     //We will define a touch began function which
     //signifies when you touch something.
-    override func touchesBegan(touches: NSSet!, withEvent event: UIEvent!) {
-        firstpoint = touches.anyObject().locationInView(self)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        firstpoint = touch!.location(in: self)
     }
     
-    override func touchesMoved(touches: NSSet!, withEvent event: UIEvent!) {
-        newpoint = touches.anyObject().locationInView(self)
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first
+        
+        newpoint = touch!.location(in: self)
         lineslist.append(line(start: firstpoint, end: newpoint))
         //Now we have to make this point the first point in the next line
         firstpoint = newpoint
@@ -29,22 +33,23 @@ class drawView: UIView {
         self.setNeedsDisplay()
     }
     
-    override func drawRect(rect: CGRect)
+    override func draw(_ rect: CGRect)
     {
-    var context = UIGraphicsGetCurrentContext()
-    CGContextBeginPath(context)
+    let context = UIGraphicsGetCurrentContext()
+    context?.beginPath()
     for lines in lineslist{
-            println("\(lines.start)")
-            println("\(lines.end)")
-            CGContextMoveToPoint(context, lines.start.x, lines.start.y)
-           CGContextAddLineToPoint(context, lines.end.x, lines.end.y)
+            print("\(lines.start)")
+            print("\(lines.end)")
+            context?.move(to: CGPoint(x: lines.start.x, y: lines.start.y))
+           context?.addLine(to: CGPoint(x: lines.end.x, y: lines.end.y))
         }
-        CGContextSetLineCap(context, kCGLineCapRound)
+//        context?.setLineCap(kCALineCapRound)
+        
         //CGContextSetRGBStrokeColor(context, 0, 0, 0, 0)
-        println("Stroke Color Set")
-        CGContextSetLineWidth(context, 5)
-        CGContextStrokePath(context)
-        println("Path Drawn")
+        print("Stroke Color Set")
+        context?.setLineWidth(5)
+        context?.strokePath()
+        print("Path Drawn")
     }
     
     func clearcall(){
